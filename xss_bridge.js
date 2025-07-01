@@ -1,5 +1,5 @@
-console.log("✅ Ejecutado desde el dominio externo");
-alert(document.domain); // o document.cookie para testeo
+console.log("✅ xss_bridge.js ejecutado");
+alert("Payload ejecutado desde iframe");
 
 
 
